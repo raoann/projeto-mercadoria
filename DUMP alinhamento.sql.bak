@@ -1,0 +1,238 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema alinhamentoltda
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema alinhamentoltda
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `alinhamentoltda` DEFAULT CHARACTER SET latin1 ;
+USE `alinhamentoltda` ;
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`clientes`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`clientes` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nm_cliente` VARCHAR(50) NOT NULL,
+  `sobrenome` VARCHAR(50) NOT NULL,
+  `tel` INT NOT NULL,
+  `vip` ENUM('True', 'false') NOT NULL DEFAULT 'false',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`lojas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`lojas` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nm_loja` VARCHAR(100) NOT NULL,
+  `varejo` VARCHAR(50) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 1000
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`fornecedores`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`fornecedores` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `nm_fornecedor` VARCHAR(100) NOT NULL,
+  `tipo` ENUM('distribuidora', 'fabrica') NOT NULL DEFAULT 'distribuidora',
+  `qtd_carros` INT(11) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 1000
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`enderecos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`enderecos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `cep` VARCHAR(10) NOT NULL,
+  `logradouro` VARCHAR(100) NOT NULL,
+  `complemento` VARCHAR(100) BINARY NOT NULL,
+  `bairro` VARCHAR(50) NOT NULL,
+  `uf` CHAR(2) NOT NULL,
+  `fk_loja` INT(11) NULL DEFAULT NULL,
+  `fk_cliente` INT(11) NULL DEFAULT NULL,
+  `fk_fornecedor` INT(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_loja` (`fk_loja` ASC) VISIBLE,
+  INDEX `fk_cliente` (`fk_cliente` ASC) VISIBLE,
+  INDEX `fk_fornecedor` (`fk_fornecedor` ASC) VISIBLE,
+  CONSTRAINT `endereco_ibfk_1`
+    FOREIGN KEY (`fk_loja`)
+    REFERENCES `alinhamentoltda`.`lojas` (`id`),
+  CONSTRAINT `endereco_ibfk_2`
+    FOREIGN KEY (`fk_cliente`)
+    REFERENCES `alinhamentoltda`.`clientes` (`id`),
+  CONSTRAINT `endereco_ibfk_3`
+    FOREIGN KEY (`fk_fornecedor`)
+    REFERENCES `alinhamentoltda`.`fornecedores` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`vendas_cliente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`vendas_cliente` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `valor` DECIMAL(7,2) NOT NULL,
+  `fk_loja` INT(11) NOT NULL,
+  `fk_cliente` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_venda_cliente_loja1_idx` (`fk_loja` ASC) VISIBLE,
+  INDEX `fk_venda_cliente_cliente1_idx` (`fk_cliente` ASC) VISIBLE,
+  CONSTRAINT `fk_venda_cliente_loja1`
+    FOREIGN KEY (`fk_loja`)
+    REFERENCES `alinhamentoltda`.`lojas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_venda_cliente_cliente1`
+    FOREIGN KEY (`fk_cliente`)
+    REFERENCES `alinhamentoltda`.`clientes` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1000
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`entregas`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`entregas` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `status` VARCHAR(255) NOT NULL,
+  `Entregue` DATE NULL DEFAULT NULL,
+  `fk_venda_cliente` INT(11) NOT NULL,
+  `fk_endereco` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_venda_cliente` (`fk_venda_cliente` ASC) VISIBLE,
+  INDEX `fk_endereco` (`fk_endereco` ASC) VISIBLE,
+  CONSTRAINT `entrega_ibfk_1`
+    FOREIGN KEY (`fk_venda_cliente`)
+    REFERENCES `alinhamentoltda`.`vendas_cliente` (`id`),
+  CONSTRAINT `entrega_ibfk_2`
+    FOREIGN KEY (`fk_endereco`)
+    REFERENCES `alinhamentoltda`.`enderecos` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`produtos`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`produtos` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_produto` INT NOT NULL,
+  `qtd_produto` INT NOT NULL,
+  `dt_fabricado` DATE NOT NULL,
+  `dt_validade` DATE NOT NULL,
+  `refrigerado` ENUM('false', 'true') NOT NULL DEFAULT 'false',
+  `setor` VARCHAR(50) NOT NULL,
+  `fk_fornecedor` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_fornecedor` (`fk_fornecedor` ASC) VISIBLE,
+  CONSTRAINT `produto_ibfk_1`
+    FOREIGN KEY (`fk_fornecedor`)
+    REFERENCES `alinhamentoltda`.`fornecedores` (`id`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 100
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`compras_loja`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`compras_loja` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `valor` DECIMAL(7,2) NOT NULL,
+  `fk_fornecedor` INT(11) NOT NULL,
+  `fk_loja` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_compra_loja_fornecedor1_idx` (`fk_fornecedor` ASC) VISIBLE,
+  INDEX `fk_compra_loja_loja1_idx` (`fk_loja` ASC) VISIBLE,
+  CONSTRAINT `fk_compra_loja_fornecedor1`
+    FOREIGN KEY (`fk_fornecedor`)
+    REFERENCES `alinhamentoltda`.`fornecedores` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_compra_loja_loja1`
+    FOREIGN KEY (`fk_loja`)
+    REFERENCES `alinhamentoltda`.`lojas` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`Itens_compra`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`Itens_compra` (
+  `id` INT NOT NULL,
+  `qtd_produtos` INT NOT NULL,
+  `nm_nota_fiscal` VARCHAR(50) NOT NULL,
+  `fk_compra_loja` INT(11) NOT NULL,
+  `fk_produto` INT(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  INDEX `fk_Itens_compra_compra_loja1_idx` (`fk_compra_loja` ASC) VISIBLE,
+  INDEX `fk_Itens_compra_produto1_idx` (`fk_produto` ASC) VISIBLE,
+  CONSTRAINT `fk_Itens_compra_compra_loja1`
+    FOREIGN KEY (`fk_compra_loja`)
+    REFERENCES `alinhamentoltda`.`compras_loja` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Itens_compra_produto1`
+    FOREIGN KEY (`fk_produto`)
+    REFERENCES `alinhamentoltda`.`produtos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `alinhamentoltda`.`itens_venda`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `alinhamentoltda`.`itens_venda` (
+  `id` INT NOT NULL,
+  `qtd_produtos` INT NULL,
+  `nm_nota_fiscal` VARCHAR(50) NULL,
+  `produto_id` INT(11) NOT NULL,
+  `venda_cliente_id` INT(11) NOT NULL,
+  INDEX `fk_itens_venda_produto1_idx` (`produto_id` ASC) VISIBLE,
+  INDEX `fk_itens_venda_venda_cliente1_idx` (`venda_cliente_id` ASC) VISIBLE,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `fk_itens_venda_produto1`
+    FOREIGN KEY (`produto_id`)
+    REFERENCES `alinhamentoltda`.`produtos` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_itens_venda_venda_cliente1`
+    FOREIGN KEY (`venda_cliente_id`)
+    REFERENCES `alinhamentoltda`.`vendas_cliente` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

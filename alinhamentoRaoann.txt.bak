@@ -1,0 +1,15 @@
+
+Criação de uma sistema de vendas
+Desenhe um modelo conceitual, logico, fisico e um dicionario de dados de um sistema de vendas
+script de criação das tabelas seguindo padrão de nomenclatura. ok
+criação de indices
+criação de uma view (mostrar todos os produtos e seus fornecedores)
+Crição de uma view (mostrar fornecedores e seus endereços)
+Procedures para inclusão de produto, fornecedor, venda, cliente.
+Criação de triggers para validação (Validar se determinado cliente já existe)
+Criação de uma function(Retorna se o cliente é um bom pagador)
+
+
+
+
+

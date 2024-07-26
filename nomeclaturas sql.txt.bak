@@ -1,0 +1,8 @@
+nr = numero(
+vl = valor do item (R$, $)
+sg = sigla, para quando tiver alguma abreviação (UF, RG)
+cd = codigo (QRcode, codigo de produto)
+qt = quantidade (caixas, volumes)
+in = identificador limitado (true or false), (quente, frio), (Fabrica, fornecedor, distribuidor)
+ds = descrição (logradouro, complemento)
+id = identificador da tabela ou da foreign key (fk)

@@ -1,0 +1,61 @@
+TABLE_NAME,COLUMN_NAME,IS_NULLABLE,COLUMN_TYPE,COLUMN_KEY,EXTRA,CHARACTER_MAXIMUM_LENGTH,COLUMN_DEFAULT,COLUMN_COMMENT
+cidade,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador da cidade
+cidade,nm_cidade,NO,varchar(45),,,45,NULL,nome da cidade
+cidade,id_estado,NO,int(11),PRI,,NULL,NULL,identificador do estado
+cliente,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador do cliente
+cliente,nm_cliente,NO,varchar(50),,,50,NULL,nome do cliente
+cliente,nm_sobrenome,NO,varchar(50),,,50,NULL,sobrenome do cliente
+cliente,nr_telefone,NO,varchar(14),,,14,NULL,numero de telefone
+cliente,in_vip,NO,tinyint(4),,,NULL,0,identificador do cliente vip
+cliente,id_endereco,NO,int(11),MUL,,NULL,NULL,identificador do endereco
+compra_loja,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador da compra
+compra_loja,vl_compra,NO,"decimal(7,2)",,,NULL,NULL,valor total da compra
+compra_loja,id_fornecedor,NO,int(11),PRI,,NULL,NULL,identificador do fornecedor
+compra_loja,id_loja,NO,int(11),PRI,,NULL,NULL,identificador da loja
+endereco,id,NO,int(11),PRI,auto_increment,NULL,NULL,Identificador da tabela
+endereco,nr_cep,NO,varchar(10),,,10,NULL,numero do cep
+endereco,id_cidade,NO,int(11),PRI,,NULL,NULL,identificador da tabela
+endereco,ds_logradouro,NO,varchar(100),,,100,NULL,descricao do logradouro
+endereco,ds_complemento,YES,varchar(50),,,50,NULL,descricao do complemento
+endereco,nm_bairro,NO,varchar(50),,,50,NULL,nome do bairro
+entrega,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador da entrega
+entrega,tp_status,NO,tinyint(4),,,NULL,NULL,tipo do estado
+entrega,dt_entrega,YES,date,,,NULL,NULL,data da entrega
+entrega,id_venda_cliente,NO,int(11),PRI,,NULL,NULL,identificador da venda para o cliente
+entrega,id_endereco,NO,int(11),PRI,,NULL,NULL,identificador do endereco
+estado,id,NO,int(11),PRI,auto_increment,NULL,NULL,Identificador unico do estado
+estado,nm_estado,NO,varchar(45),,,45,NULL,nome do estado
+estado,sg_uf,NO,varchar(2),,,2,NULL,Sigla de unidade federativa
+fornecedor,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador do fornecedor
+fornecedor,cd_fornecedor,NO,int(10),,,NULL,NULL,codigo do fornecedor 
+fornecedor,nm_fornecedor,NO,varchar(100),,,100,NULL,nome do fornecedor
+fornecedor,tp_tipo,NO,tinyint(4),,,NULL,1,tipo do fornecedor
+fornecedor,qt_carros,NO,int(4),,,NULL,NULL,quantidade de carros para transporte
+fornecedor,id_endereco,NO,int(11),MUL,,NULL,NULL,identificador do endereco
+item_compra,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador do item para compra
+item_compra,qt_produto,NO,int(10),,,NULL,NULL,quantidade de produtos
+item_compra,nr_nota_fiscal,NO,varchar(50),,,50,NULL,numero da nota fiscal
+item_compra,id_compra_loja,NO,int(11),PRI,,NULL,NULL,identificador da compra da loja
+item_compra,id_produto,NO,int(11),PRI,,NULL,NULL,identificador do produto comprado
+item_compra,vl_item_compra,NO,"decimal(7,2)",,,NULL,NULL,valor dos itens
+item_venda,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador do item para venda
+item_venda,qt_produto,NO,int(11),,,NULL,NULL,quantidade de produto
+item_venda,nm_nota_fiscal,NO,varchar(50),,,50,NULL,numero da nota fiscal
+item_venda,id_produto,NO,int(11),PRI,,NULL,NULL,identificador do produto
+item_venda,id_venda_cliente,NO,int(11),PRI,,NULL,NULL,identificador da venda cliente
+loja,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador da loja
+loja,nm_loja,NO,varchar(100),,,100,NULL,nome da loja
+loja,tp_loja,NO,tinyint(4),,,NULL,NULL,tipo da loja
+loja,id_endereco,NO,int(11),MUL,,NULL,NULL,identificador do endereco
+produto,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador unico
+produto,cd_produto,NO,int(10),,,NULL,NULL,codigo do produto
+produto,qt_produto,NO,int(255),,,NULL,NULL,quantidade do produto
+produto,dt_fabricado,NO,date,,,NULL,NULL,data de fabricacao
+produto,dt_validade,NO,date,,,NULL,NULL,data de validade do produto
+produto,in_refrigerado,NO,tinyint(4),,,NULL,0,indentificador do produto
+produto,nm_setor,NO,varchar(50),,,50,NULL,nome do setor do produto
+produto,id_fornecedor,NO,int(11),PRI,,NULL,NULL,identificador do fornecedor do produto
+venda_cliente,id,NO,int(11),PRI,auto_increment,NULL,NULL,identificador da venda para o cliente
+venda_cliente,vl_total_venda,NO,"decimal(7,2)",,,NULL,NULL,valor total da venda
+venda_cliente,id_loja,NO,int(11),PRI,,NULL,NULL,identificador da loja
+venda_cliente,id_cliente,NO,int(11),PRI,,NULL,NULL,identificador do cliente
